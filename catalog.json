@@ -1,0 +1,46 @@
+[
+  {
+    "id": "drift-i",
+    "name": "Drift SOE",
+    "description": "4 SOE Selection x 2",
+    "price": 120,
+    "packs": 12,
+    "flavorEn": "",
+    "flavorZh": "",
+    "imageUrl": "",
+    "enabled": true
+  },
+  {
+    "id": "drift-ii",
+    "name": "Drift Select",
+    "description": "5 Filter Selection x 2",
+    "price": 120,
+    "packs": 10,
+    "flavorEn": "",
+    "flavorZh": "",
+    "imageUrl": "",
+    "enabled": true
+  },
+  {
+    "id": "drift-iii",
+    "name": "Drift Prime",
+    "description": "5 Filter Selection x 2",
+    "price": 160,
+    "packs": 10,
+    "flavorEn": "",
+    "flavorZh": "",
+    "imageUrl": "",
+    "enabled": true
+  },
+  {
+    "id": "drift-iiii",
+    "name": "Drift Signature",
+    "description": "5 Filter Selection x 2",
+    "price": 220,
+    "packs": 10,
+    "flavorEn": "",
+    "flavorZh": "",
+    "imageUrl": "",
+    "enabled": true
+  }
+]

@@ -1,0 +1,265 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111111" />
+    <title>Drift</title>
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: {
+                10: "#0A0A0A",
+                20: "#111111",
+                30: "#1A1A1A",
+                40: "#222222",
+                60: "#555555",
+                95: "#EDEDED",
+              },
+            },
+            fontFamily: {
+              sans: [
+                "Inter",
+                "ui-sans-serif",
+                "system-ui",
+                "-apple-system",
+                "SF Pro Display",
+                "Segoe UI",
+                "Helvetica Neue",
+                "Arial",
+                "Noto Sans",
+                "sans-serif",
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root { color-scheme: dark; }
+      /* Slightly lighter base gray for comfort */
+      html, body { background:#1A1A1A; }
+      .tabular { font-variant-numeric: tabular-nums; }
+      [hidden] { display:none !important; }
+    </style>
+  </head>
+  <body class="font-sans bg-ink-30 text-ink-95 antialiased">
+    <header class="sticky top-0 z-40 bg-ink-30/80 backdrop-blur border-b border-ink-40">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="h-16 flex items-center justify-between">
+          <a href="#home" class="text-[12px] tracking-[0.22em] uppercase">Drift</a>
+          <nav class="flex items-center gap-6 text-[12px] tracking-[0.22em] uppercase text-ink-60">
+            <a href="#shop" class="hover:text-ink-95 transition-colors">Shop</a>
+            <a href="#about" class="hover:text-ink-95 transition-colors">About</a>
+            <a href="#contact" class="hover:text-ink-95 transition-colors">Contact</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4">
+      <!-- HOME -->
+      <section id="home" class="min-h-[calc(100vh-4rem)] grid place-items-center">
+        <div class="text-center select-none">
+          <div class="text-[11px] tracking-[0.32em] uppercase text-ink-60">Coffee Drip Bag</div>
+          <div class="mt-6 text-[clamp(64px,10vw,140px)] leading-[0.92] tracking-[0.32em] font-medium">DRIFT</div>
+          <div class="mt-8 text-[11px] tracking-[0.32em] uppercase text-ink-60">Carry the Drift. Savor the drip.</div>
+          <div class="mt-10 text-[11px] tracking-[0.22em] uppercase text-ink-60">Scroll ↓</div>
+        </div>
+      </section>
+
+      <!-- SHOP -->
+      <section id="shop" class="py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div class="lg:col-span-8">
+            <div class="flex items-end justify-between border-b border-ink-40 pb-4">
+              <div>
+                <div class="text-[16px] tracking-[0.12em] uppercase text-ink-60">Shop</div>
+                <h1 class="mt-3 text-[16px] tracking-[0.12em] uppercase">Drip Bag Set</h1>
+              </div>
+            </div>
+            <div id="shop-grid" class="mt-10"></div>
+          </div>
+
+          <aside class="lg:col-span-4 lg:pt-20">
+            <div class="sticky top-56 border border-ink-40 bg-ink-20">
+              <div class="p-6">
+                <div class="flex items-center justify-between">
+                  <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Cart</div>
+                  <button id="btn-clear" type="button" class="text-[11px] tracking-[0.22em] uppercase text-ink-60 hover:text-ink-95 transition-colors">Clear</button>
+                </div>
+                <div class="mt-6 grid grid-cols-2 gap-y-2 text-[12px] text-ink-60">
+                  <div>Packs</div><div id="cart-units" class="text-right tabular text-ink-95">0</div>
+                  <div>Subtotal</div><div id="cart-subtotal" class="text-right tabular text-ink-95">HK$0</div>
+                  <div>Shipping</div><div id="cart-shipping" class="text-right tabular text-ink-95">HK$0</div>
+                  <div>Total</div><div id="cart-total" class="text-right tabular text-ink-95">HK$0</div>
+                </div>
+                <div id="cart-ship-rule" class="mt-4 text-[11px] text-ink-60"></div>
+                <div class="mt-6 border-t border-ink-40 pt-6" id="cart-lines"></div>
+                <div class="mt-8">
+                  <button id="btn-checkout" type="button" class="w-full border border-ink-40 bg-ink-10 px-4 py-3 text-[12px] tracking-[0.22em] uppercase hover:bg-ink-20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>Checkout</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="py-12">
+        <div class="border-b border-ink-40 pb-4">
+          <h1 class="text-[16px] tracking-[0.12em] uppercase">About Drift</h1>
+        </div>
+        <div class="mt-10 max-w-2xl text-[14px] leading-relaxed text-ink-60 whitespace-nowrap">
+          Drift was born from a simple desire: to bring the comfort of a quiet café into a single drip bag.
+          <br /><br />
+          With minimal steps and no compromise on quality, we deliver single origin coffee that you can brew anywhere, anytime.
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="py-12">
+        <div class="border-b border-ink-40 pb-4">
+          <h1 class="text-[16px] tracking-[0.12em] uppercase">Contact</h1>
+        </div>
+        <div class="mt-10 text-[14px] text-ink-60">
+          For any enquiries, please contact <span class="text-ink-95 tabular">65459695</span>.
+        </div>
+      </section>
+    </main>
+
+    <!-- Mobile cart bar -->
+    <div id="cart-mobile" class="lg:hidden fixed bottom-0 left-0 right-0 border-t border-ink-40 bg-ink-10/90 backdrop-blur px-4 py-4" hidden>
+      <div class="mx-auto max-w-6xl flex items-center justify-between gap-4">
+        <div>
+          <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Packs <span id="cart-mobile-units" class="text-ink-95 tabular">0</span></div>
+          <div id="cart-mobile-total" class="mt-1 text-[14px] tracking-[0.12em] tabular">HK$0</div>
+        </div>
+        <button id="btn-checkout-mobile" type="button" class="border border-ink-40 bg-ink-20 px-5 py-3 text-[12px] tracking-[0.22em] uppercase hover:bg-ink-30 transition-colors">Checkout</button>
+      </div>
+    </div>
+
+    <!-- Checkout modal -->
+    <div id="checkout" class="fixed inset-0 z-50" hidden>
+      <div id="checkout-backdrop" class="absolute inset-0 bg-ink-10/85 backdrop-blur-sm"></div>
+      <div class="absolute inset-x-0 bottom-0 lg:inset-0 lg:grid lg:place-items-center">
+        <div class="w-full lg:max-w-xl border border-ink-40 bg-ink-20 lg:bg-ink-30">
+          <div class="flex items-center justify-between px-6 py-5 border-b border-ink-40 bg-ink-20 lg:bg-ink-30">
+            <div class="text-[12px] tracking-[0.22em] uppercase text-ink-95">Checkout</div>
+            <button id="btn-close-checkout" type="button" class="text-[11px] tracking-[0.22em] uppercase text-ink-60 hover:text-ink-95 transition-colors">Close</button>
+          </div>
+          <div class="p-6">
+            <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Order</div>
+            <div class="mt-2 flex items-center justify-between gap-4">
+              <div id="order-id-display" class="text-[12px] tabular text-ink-95"></div>
+              <button
+                id="btn-copy-order-id"
+                type="button"
+                class="shrink-0 text-[11px] tracking-[0.22em] uppercase text-ink-60 hover:text-ink-95 transition-colors"
+              >
+                Copy
+              </button>
+            </div>
+            <div class="mt-2 text-[11px] text-ink-60" id="remark-note"></div>
+            <div class="mt-4 text-[11px] text-ink-60">Shipping: HK$30 · Free at HK$240</div>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a
+                id="payme-link"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="border border-ink-40 bg-ink-10 px-4 py-3 text-center text-[12px] tracking-[0.22em] uppercase hover:bg-ink-20 transition-colors"
+              >
+                PayMe
+              </a>
+              <div class="border border-ink-40 bg-ink-10 px-4 py-3">
+                <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">FPS</div>
+                <div class="mt-2 flex items-center justify-between gap-4">
+                  <div id="fps-id" class="text-[12px] tabular text-ink-95"></div>
+                  <button
+                    id="btn-copy-fps"
+                    type="button"
+                    class="shrink-0 text-[11px] tracking-[0.22em] uppercase text-ink-60 hover:text-ink-95 transition-colors"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 border-t border-ink-40 pt-6">
+              <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Order Summary</div>
+              <pre id="order-summary-display" class="mt-3 whitespace-pre-wrap text-[12px] leading-relaxed text-ink-95/90"></pre>
+            </div>
+
+            <form id="form-order" name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="mt-6 space-y-4">
+              <input type="hidden" name="form-name" value="order" />
+              <p class="hidden"><label>Don’t fill this out: <input name="bot-field" /></label></p>
+              <input type="hidden" id="order-id" name="order_id" value="" />
+              <input type="hidden" id="order-summary" name="order_summary" value="" />
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="block">
+                  <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Name</div>
+                  <input id="field-name" name="name" required class="mt-2 w-full bg-ink-10 border border-ink-40 px-4 py-3 text-[12px] text-ink-95 outline-none focus:border-ink-95 focus:bg-ink-20 transition-colors" />
+                </label>
+                <label class="block">
+                  <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Phone / WhatsApp</div>
+                  <input name="phone" required class="mt-2 w-full bg-ink-10 border border-ink-40 px-4 py-3 text-[12px] text-ink-95 outline-none focus:border-ink-95 focus:bg-ink-20 transition-colors" />
+                </label>
+              </div>
+              <label class="block">
+                <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Address</div>
+                <textarea name="address" required class="mt-2 w-full min-h-[96px] bg-ink-10 border border-ink-40 px-4 py-3 text-[12px] text-ink-95 outline-none focus:border-ink-95 focus:bg-ink-20 transition-colors"></textarea>
+              </label>
+              <label class="block">
+                <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Email (Optional) (Prefer email confirmation over WhatsApp)</div>
+                <input name="email" type="email" inputmode="email" autocomplete="email" class="mt-3 w-full bg-ink-10 border border-ink-40 px-4 py-3 text-[12px] text-ink-95 outline-none focus:border-ink-95 focus:bg-ink-20 transition-colors" />
+              </label>
+
+              <button id="btn-submit-order" type="submit" class="w-full border border-ink-40 bg-ink-10 px-4 py-3 text-[12px] tracking-[0.22em] uppercase hover:bg-ink-20 transition-colors">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var isLocal =
+          location.hostname === "127.0.0.1" || location.hostname === "localhost";
+        var v = isLocal ? String(Date.now()) : "20260407_1";
+        window.__SHOP_V__ = v;
+
+        function load(src) {
+          return new Promise(function (resolve, reject) {
+            var s = document.createElement("script");
+            s.src = src + "?v=" + v;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.body.appendChild(s);
+          });
+        }
+
+        // Always load latest catalog locally to avoid cache.
+        load("config.js")
+          .then(function () {
+            return load("catalog.js");
+          })
+          .then(function () {
+            return load("app.js");
+          })
+          .catch(function (e) {
+            console.error("Script load failed:", e);
+          });
+      })();
+    </script>
+  </body>
+</html>
