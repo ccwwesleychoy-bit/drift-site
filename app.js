@@ -111,9 +111,19 @@
     const rows = products
       .map((p) => {
         const q = Number(state.cart[p.id] || 0);
+        const img = String(p.imageUrl || "").trim();
+        const media = img
+          ? `
+            <div class="aspect-[16/10] bg-[#1a1a1a] overflow-hidden">
+              <img src="${escapeAttr(
+                img
+              )}" alt="" loading="lazy" class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition" onerror="this.remove()" />
+            </div>
+          `
+          : "";
         return `
           <article class="group border border-[#222] bg-[#111]">
-            <div class="aspect-[16/10] bg-[#1a1a1a]"></div>
+            ${media}
             <div class="p-5">
               <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
