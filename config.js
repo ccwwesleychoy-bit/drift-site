@@ -6,7 +6,11 @@ window.SHOP_CONFIG = {
   freeShippingAtAmount: 240,
   shippingFee: 30,
   currencyLabel: "HK$",
-  footerNote: "購物滿 HK$240 免運；未滿 HK$240 運費 HK$30。",
+  // English only; shown in footer + checkout (edit wording here).
+  disclaimerNote:
+    "All sales are final once shipped.\n\n" +
+    "As drip bags contain fresh roasted coffee, returns and refunds are not accepted except in cases of manufacturing defects or damage during delivery.\n\n" +
+    "We appreciate your understanding.",
   payMeUrl: "https://payme.hsbc/996976ef1a4840e397b5d218c81a662a",
   fpsId: "65459695",
   fpsNote: "Please put the Order ID in the transfer remark.",

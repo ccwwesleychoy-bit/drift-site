@@ -1,19 +1,8 @@
 [
   {
     "id": "drift-i",
-    "name": "Drift SOE",
-    "description": "4 SOE Selection x 2",
-    "price": 120,
-    "packs": 12,
-    "flavorEn": "",
-    "flavorZh": "",
-    "imageUrl": "",
-    "enabled": true
-  },
-  {
-    "id": "drift-ii",
-    "name": "Drift Select",
-    "description": "5 Filter Selection x 2",
+    "name": "Drift Nutty",
+    "description": "Nutty Selection x 10",
     "price": 120,
     "packs": 10,
     "flavorEn": "",
@@ -22,10 +11,10 @@
     "enabled": true
   },
   {
-    "id": "drift-iii",
-    "name": "Drift Prime",
-    "description": "5 Filter Selection x 2",
-    "price": 160,
+    "id": "drift-ii",
+    "name": "Drift Select",
+    "description": "Nutty Selection x 2\n2 Filter Selection x 2\n2 Geisha Selection x 2",
+    "price": 150,
     "packs": 10,
     "flavorEn": "",
     "flavorZh": "",
@@ -35,8 +24,8 @@
   {
     "id": "drift-iiii",
     "name": "Drift Signature",
-    "description": "5 Filter Selection x 2",
-    "price": 220,
+    "description": "5 Geisha Selection x 2",
+    "price": 250,
     "packs": 10,
     "flavorEn": "",
     "flavorZh": "",

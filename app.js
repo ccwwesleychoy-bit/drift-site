@@ -100,13 +100,7 @@
     const root = $("shop-grid");
     if (!root) return;
 
-    // Layout logic:
-    // - Mobile: 1 col
-    // - Small+: 2 cols
-    // - Large: prefer 3 cols, but avoid an orphan last item (e.g. 4 items => 2x2).
-    const n = products.length;
-    const preferTwoOnLg = n === 4 || n % 3 === 1; // 4,7,10,... look better as 2 columns
-    const gridCls = preferTwoOnLg ? "lg:grid-cols-2" : "lg:grid-cols-3";
+    // Layout: 1 col mobile, 2 cols from sm+ (never 3 — reads calmer on desktop).
 
     const rows = products
       .map((p) => {
@@ -130,7 +124,7 @@
                   <div class="truncate text-[13px] tracking-[0.14em] uppercase text-[#ededed]">${escapeHtml(
                     p.name || ""
                   )}</div>
-                  <div class="mt-2 text-[12px] leading-relaxed text-[#9a9a9a]">${escapeHtml(
+                  <div class="mt-2 whitespace-pre-line text-[12px] leading-relaxed text-[#9a9a9a]">${escapeHtml(
                     p.description || ""
                   )}</div>
                 </div>
@@ -165,7 +159,7 @@
       .join("");
 
     root.innerHTML = `
-      <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 ${gridCls}">
+      <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
         ${rows}
       </div>
     `;
@@ -246,7 +240,7 @@
     if ($("remark-note"))
       $("remark-note").textContent =
         (cfg.fpsNote || "Please put the Order ID in the transfer remark.") +
-        " (Remark: " +
+        "\n(Remark: " +
         state.orderId +
         ")";
     if ($("payme-link")) $("payme-link").href = cfg.payMeUrl || "#";
@@ -425,8 +419,29 @@
     }
   }
 
+  function fillDisclaimerEl(el, raw) {
+    if (!el) return;
+    el.replaceChildren();
+    const parts = String(raw || "")
+      .split(/\n\s*\n/)
+      .map((s) => s.trim().replace(/\s+/g, " "))
+      .filter(Boolean);
+    for (const para of parts) {
+      const p = document.createElement("p");
+      p.textContent = para;
+      el.appendChild(p);
+    }
+  }
+
+  function renderDisclaimer() {
+    const raw = cfg.disclaimerNote;
+    fillDisclaimerEl($("footer-disclaimer"), raw);
+    fillDisclaimerEl($("checkout-disclaimer"), raw);
+  }
+
   async function boot() {
     await loadCatalogPreferJson();
+    renderDisclaimer();
     renderShopRows();
     renderCart();
     renderCartMobile();
