@@ -16,8 +16,8 @@ window.SHOP_CONFIG = {
   contactPhone: "65459695",
   fpsId: "128799590",
   fpsNote: "Please put the Order ID in the transfer remark.",
-  // Optional: Google Apps Script Web App URL (used on Cloudflare Pages).
-  // If set, checkout submit will POST order data to this endpoint to trigger a Gmail email.
+  // Optional: Google Apps Script Web App URL. POST JSON includes paymentProofBase64 / Mime / FileName
+  // (入數截圖). See order-email-handler.example.gs to attach the image in Gmail.
   orderEndpoint:
-    "https://script.google.com/macros/s/AKfycbzHxO7IWjO0qt_MQlyF79ewuQBWHV2FvxBo8nef7ZZDo2YVYdArIKCXE83uav_9JwouxA/exec",
+    "https://script.google.com/macros/s/AKfycbyjfdvyqImTmCXTCB24SCpMSmAlWf7Bv_Lkj0k_tIpIj99Ki7ZSJvKCTAcgL3uKaYe_Vw/exec",
 };

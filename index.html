@@ -306,6 +306,47 @@
                 <input name="email" type="email" inputmode="email" autocomplete="email" class="mt-3 w-full bg-ink-10 border border-ink-40 px-4 py-3 text-[12px] text-ink-95 outline-none focus:border-ink-95 focus:bg-ink-20 transition-colors" />
               </label>
 
+              <div class="block border border-ink-40 bg-ink-10 px-4 py-4">
+                <div class="text-[11px] tracking-[0.22em] uppercase text-ink-60">Payment screenshot</div>
+                <p class="mt-2 text-[11px] leading-relaxed text-ink-60">
+                  Upload a <strong class="font-medium text-ink-95">screen capture / photo</strong> of your completed PayMe or FPS (showing amount and time). Required — orders without this image cannot be submitted.
+                </p>
+                <input
+                  id="payment-proof-input"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+                  class="sr-only"
+                  tabindex="-1"
+                  aria-hidden="true"
+                />
+                <div class="mt-3 flex flex-wrap items-center gap-2">
+                  <button
+                    id="btn-payment-proof-pick"
+                    type="button"
+                    class="border border-ink-40 bg-ink-20 px-4 py-2.5 text-[11px] tracking-[0.18em] uppercase text-ink-95 hover:bg-ink-30 transition-colors"
+                  >
+                    Choose image
+                  </button>
+                  <button
+                    id="btn-payment-proof-clear"
+                    type="button"
+                    class="hidden border border-ink-40 px-4 py-2.5 text-[11px] tracking-[0.18em] uppercase text-ink-60 hover:text-ink-95 transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <p id="payment-proof-filename" class="mt-2 hidden text-[11px] text-ink-60"></p>
+                <p id="payment-proof-error" class="mt-2 hidden text-[11px] font-medium text-[#c98a8a]"></p>
+                <div id="payment-proof-preview-wrap" class="mt-4 hidden">
+                  <div class="text-[10px] tracking-[0.2em] uppercase text-ink-60">Preview</div>
+                  <img
+                    id="payment-proof-preview"
+                    alt="Payment proof preview"
+                    class="mt-2 max-h-52 w-auto max-w-full rounded border border-ink-40 object-contain"
+                  />
+                </div>
+              </div>
+
               <button id="btn-submit-order" type="submit" class="w-full border border-ink-40 bg-ink-10 px-4 py-3 text-[12px] tracking-[0.22em] uppercase hover:bg-ink-20 transition-colors">
                 Submit
               </button>

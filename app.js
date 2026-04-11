@@ -40,6 +40,8 @@
     cart: {}, // { [id]: qty }
     orderId: "",
     submitting: false,
+    /** @type {null | { base64: string; mime: string; name: string; previewUrl: string }} */
+    paymentProof: null,
   };
 
   const $ = (id) => document.getElementById(id);
@@ -248,8 +250,151 @@
     if ($("cart-mobile-units")) $("cart-mobile-units").textContent = String(unitCount());
   }
 
+  function resetPaymentProof() {
+    if (state.paymentProof && state.paymentProof.previewUrl) {
+      try {
+        URL.revokeObjectURL(state.paymentProof.previewUrl);
+      } catch (_) {}
+    }
+    state.paymentProof = null;
+    const input = $("payment-proof-input");
+    if (input) input.value = "";
+    const err = $("payment-proof-error");
+    if (err) {
+      err.textContent = "";
+      err.classList.add("hidden");
+    }
+    const fnEl = $("payment-proof-filename");
+    if (fnEl) {
+      fnEl.textContent = "";
+      fnEl.classList.add("hidden");
+    }
+    const wrap = $("payment-proof-preview-wrap");
+    if (wrap) wrap.classList.add("hidden");
+    const prev = $("payment-proof-preview");
+    if (prev) {
+      prev.removeAttribute("src");
+    }
+    const clr = $("btn-payment-proof-clear");
+    if (clr) clr.classList.add("hidden");
+  }
+
+  function compressImageToJpegBlob(file, maxW, quality) {
+    const mw = maxW == null ? 1680 : maxW;
+    const q = quality == null ? 0.85 : quality;
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        let w = img.naturalWidth;
+        let h = img.naturalHeight;
+        if (!w || !h) {
+          reject(new Error("image"));
+          return;
+        }
+        if (w > mw) {
+          h = Math.round((h * mw) / w);
+          w = mw;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("canvas"));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error("blob"));
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+              const dataUrl = String(reader.result || "");
+              const i = dataUrl.indexOf(",");
+              const base64 = i >= 0 ? dataUrl.slice(i + 1) : "";
+              const baseName = String(file.name || "payment-proof").replace(/\.[^.]+$/, "") || "payment-proof";
+              resolve({
+                base64,
+                mime: "image/jpeg",
+                name: baseName + ".jpg",
+                blob,
+              });
+            };
+            reader.onerror = () => reject(new Error("read"));
+            reader.readAsDataURL(blob);
+          },
+          "image/jpeg",
+          q
+        );
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("load"));
+      };
+      img.src = url;
+    });
+  }
+
+  function initPaymentProofUI() {
+    const input = $("payment-proof-input");
+    const btnPick = $("btn-payment-proof-pick");
+    const btnClear = $("btn-payment-proof-clear");
+    const err = $("payment-proof-error");
+    const fnEl = $("payment-proof-filename");
+    const wrap = $("payment-proof-preview-wrap");
+    const prev = $("payment-proof-preview");
+
+    function showProofErr(msg) {
+      if (!err) return;
+      err.textContent = msg || "";
+      err.classList.toggle("hidden", !msg);
+    }
+
+    btnPick?.addEventListener("click", () => input?.click());
+
+    btnClear?.addEventListener("click", () => {
+      showProofErr("");
+      resetPaymentProof();
+    });
+
+    input?.addEventListener("change", async () => {
+      showProofErr("");
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const maxIn = 12 * 1024 * 1024;
+      if (file.size > maxIn) {
+        showProofErr("Image must be under 12 MB.");
+        input.value = "";
+        return;
+      }
+      try {
+        const { base64, mime, name, blob } = await compressImageToJpegBlob(file);
+        resetPaymentProof();
+        input.value = "";
+        const previewUrl = URL.createObjectURL(blob);
+        state.paymentProof = { base64, mime, name, previewUrl };
+        if (prev) prev.src = previewUrl;
+        wrap?.classList.remove("hidden");
+        btnClear?.classList.remove("hidden");
+        if (fnEl) {
+          fnEl.textContent = name;
+          fnEl.classList.remove("hidden");
+        }
+      } catch {
+        showProofErr("Could not read this image. Use a JPG, PNG, or WebP screen capture / photo.");
+        input.value = "";
+      }
+    });
+  }
+
   function openCheckout() {
     if (cartLines().length === 0) return;
+    resetPaymentProof();
     state.orderId = genOrderId();
     if ($("order-id-display")) $("order-id-display").textContent = state.orderId;
     if ($("remark-note"))
@@ -389,19 +534,36 @@
       });
     }
 
+    initPaymentProofUI();
+
     const form = $("form-order");
     if (form) {
       form.addEventListener("submit", async (ev) => {
         const summary = buildOrderSummary();
         if ($("order-summary")) $("order-summary").value = summary;
-        if ($("order-summary-display"))
-      $("order-summary-display").innerHTML = orderSummaryDisplayHtml(summary);
+        if ($("order-summary-display")) {
+          $("order-summary-display").innerHTML = orderSummaryDisplayHtml(summary);
+        }
 
         const endpoint = String(cfg.orderEndpoint || "").trim();
-        if (!endpoint) return; // allow normal HTML form submission if configured later
+        if (!endpoint) return;
 
         ev.preventDefault();
         if (state.submitting) return;
+
+        if (!state.paymentProof || !state.paymentProof.base64) {
+          const pe = $("payment-proof-error");
+          if (pe) {
+            pe.textContent =
+              "Please upload your transfer screen capture / photo before submitting.";
+            pe.classList.remove("hidden");
+            try {
+              pe.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            } catch (_) {}
+          }
+          return;
+        }
+
         state.submitting = true;
 
         const btn = $("btn-submit-order");
@@ -415,14 +577,14 @@
           createdAt: new Date().toISOString(),
           name: (form.querySelector('[name="name"]') || {}).value || "",
           phone,
-          // Keep backward compatibility with the existing Apps Script email template.
-          // We only show one field in the UI, so reuse the same value here.
           whatsapp: phone,
           address: (form.querySelector('[name="address"]') || {}).value || "",
           email,
-          // Apps Script template may still print `note`, so mirror email there too.
           note: email,
           summary,
+          paymentProofBase64: state.paymentProof.base64,
+          paymentProofMime: state.paymentProof.mime,
+          paymentProofFileName: state.paymentProof.name,
         };
 
         try {
