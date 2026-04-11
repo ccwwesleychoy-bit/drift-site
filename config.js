@@ -2,6 +2,8 @@ window.SHOP_CONFIG = {
   shopName: "Drift",
   tagline: "",
   unitPerQty: 10,
+  // Shown under each product price, e.g. "12g · 10 packs" (weight first)
+  packGramLabel: "12g",
   // Free shipping when subtotal reaches this amount (HK$)
   freeShippingAtAmount: 240,
   shippingFee: 30,

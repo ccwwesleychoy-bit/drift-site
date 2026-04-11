@@ -5,6 +5,7 @@
   const currency = cfg.currencyLabel || "HK$";
   const freeAtAmount = Number(cfg.freeShippingAtAmount || 220);
   const shipFee = Number(cfg.shippingFee || 30);
+  const packGramLabel = String(cfg.packGramLabel || "12g").trim();
 
   let catalog = Array.isArray(window.SHOP_CATALOG) ? window.SHOP_CATALOG : [];
   let products = [];
@@ -149,9 +150,9 @@
                   <div class="text-[12px] tracking-[0.12em] text-[#ededed]">${money(
                     p.price
                   )}</div>
-                      <div class="mt-1 text-[11px] text-[#777]">${Number(
-                        p.packs || cfg.unitPerQty || 10
-                      )} packs</div>
+                      <div class="mt-1 text-[11px] text-[#777]">${escapeHtml(
+                        packGramLabel
+                      )} · ${Number(p.packs || cfg.unitPerQty || 10)} packs</div>
                 </div>
               </div>
 
