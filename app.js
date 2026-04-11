@@ -415,7 +415,18 @@
     if (m) m.hidden = false;
     document.body.classList.add("checkout-open");
     renderShopRows();
-    if ($("field-name")) $("field-name").focus();
+    const nameField = $("field-name");
+    if (nameField) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          try {
+            nameField.focus({ preventScroll: true });
+          } catch (_) {
+            nameField.focus();
+          }
+        });
+      });
+    }
   }
 
   function closeCheckout() {
