@@ -96,6 +96,17 @@
     return "DRIFT-" + y + m + day + "-" + r;
   }
 
+  /**
+   * 結帳開著、背景半透明時：+ 要夠亮，但不可與左邊 − 用同一套樣式（否則兩格看起來都像減號格）。
+   * #about / #contact 維持原本白底 +。
+   */
+  function invertQtyPlusForCheckoutOverlay() {
+    if (!document.body.classList.contains("checkout-open")) return false;
+    const h = String(location.hash || "").toLowerCase().trim();
+    if (h === "#about" || h === "#contact") return false;
+    return true;
+  }
+
   function renderShopRows() {
     const root = $("shop-grid");
     if (!root) return;
@@ -105,6 +116,10 @@
     const rows = products
       .map((p) => {
         const q = Number(state.cart[p.id] || 0);
+        const incPlusContrast = invertQtyPlusForCheckoutOverlay();
+        const incBtnClass = incPlusContrast
+          ? "h-9 w-9 box-border border-2 border-[#c8c8c8] bg-[#1a1a1a] text-[#fafafa] text-[17px] font-medium leading-none hover:bg-[#252525] transition"
+          : "h-9 w-9 border border-[#222] bg-[#ededed] text-[#0a0a0a] hover:bg-white transition";
         const img = String(p.imageUrl || "").trim();
         const media = img
           ? `
@@ -147,7 +162,7 @@
                     p.id
                   )}" aria-label="Decrease">−</button>
                   <div class="w-10 text-center text-[12px] text-[#ededed] tabular-nums">${q}</div>
-                  <button class="h-9 w-9 border border-[#222] bg-[#ededed] text-[#0a0a0a] hover:bg-white transition" data-act="inc" data-id="${escapeAttr(
+                  <button class="${incBtnClass}" data-act="inc" data-id="${escapeAttr(
                     p.id
                   )}" aria-label="Increase">+</button>
                 </div>
@@ -248,15 +263,20 @@
     if ($("order-id")) $("order-id").value = state.orderId;
     const summary = buildOrderSummary();
     if ($("order-summary")) $("order-summary").value = summary;
-    if ($("order-summary-display")) $("order-summary-display").textContent = summary;
+    if ($("order-summary-display"))
+      $("order-summary-display").innerHTML = orderSummaryDisplayHtml(summary);
     const m = $("checkout");
     if (m) m.hidden = false;
+    document.body.classList.add("checkout-open");
+    renderShopRows();
     if ($("field-name")) $("field-name").focus();
   }
 
   function closeCheckout() {
     const m = $("checkout");
     if (m) m.hidden = true;
+    document.body.classList.remove("checkout-open");
+    renderShopRows();
   }
 
   async function copyText(text) {
@@ -315,6 +335,19 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
   }
+
+  function orderSummaryDisplayHtml(plain) {
+    return String(plain || "")
+      .split("\n")
+      .map((line) => {
+        if (/^Total:\s/.test(line)) {
+          return '<strong class="font-bold text-ink-95">' + escapeHtml(line) + "</strong>";
+        }
+        return escapeHtml(line);
+      })
+      .join("\n");
+  }
+
   function escapeAttr(s) {
     return escapeHtml(s).replace(/'/g, "&#39;");
   }
@@ -334,6 +367,10 @@
       });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeCheckout();
+    });
+
+    window.addEventListener("hashchange", () => {
+      if (document.body.classList.contains("checkout-open")) renderShopRows();
     });
 
     const copyOrderBtn = $("btn-copy-order-id");
@@ -359,7 +396,8 @@
       form.addEventListener("submit", async (ev) => {
         const summary = buildOrderSummary();
         if ($("order-summary")) $("order-summary").value = summary;
-        if ($("order-summary-display")) $("order-summary-display").textContent = summary;
+        if ($("order-summary-display"))
+      $("order-summary-display").innerHTML = orderSummaryDisplayHtml(summary);
 
         const endpoint = String(cfg.orderEndpoint || "").trim();
         if (!endpoint) return; // allow normal HTML form submission if configured later
@@ -439,9 +477,15 @@
     fillDisclaimerEl($("checkout-disclaimer"), raw);
   }
 
+  function renderContactPhone() {
+    const el = $("contact-phone-display");
+    if (el) el.textContent = String(cfg.contactPhone || "").trim();
+  }
+
   async function boot() {
     await loadCatalogPreferJson();
     renderDisclaimer();
+    renderContactPhone();
     renderShopRows();
     renderCart();
     renderCartMobile();
