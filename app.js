@@ -314,11 +314,9 @@
     let t = "";
     t += "Order ID: " + state.orderId + "\n\n";
     for (const L of lines) {
-      const packs = Number(L.product.packs || cfg.unitPerQty || 10);
       t += `${L.product.name} × ${L.qty}  @ ${money(L.product.price)}  = ${money(
         L.product.price * L.qty
       )}\n`;
-      t += `  ${packs} packs / item\n`;
     }
     t += `\nPacks: ${units}\nSubtotal: ${money(sub)}\nShipping: ${
       ship === 0 ? "Free" : money(ship)
